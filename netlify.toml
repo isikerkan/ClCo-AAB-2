@@ -1,0 +1,11 @@
+[build]
+  publish   = "web"        # statische Site
+  functions = "functions"  # Ordner mit TS-Functions
+
+[functions]
+  node_bundler = "esbuild" # kleinste Bundle-Größe, schneller Cold-Start
+
+[[redirects]]              # Pretty API-URLs
+  from   = "/api/*"
+  to     = "/.netlify/functions/:splat"
+  status = 200
