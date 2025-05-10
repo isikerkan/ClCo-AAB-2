@@ -27,37 +27,34 @@
   </footer>
 
   <script>
-    const API_URL = '/api/zitate';
-    let quotes = [];
+    // Adjust this if your function is named differently
+    const API_URL = '/api/zitat';
 
-    async function fetchQuotes() {
+    const quoteText   = document.getElementById('quoteText');
+    const quoteAuthor = document.getElementById('quoteAuthor');
+    const loadBtn     = document.getElementById('newQuoteBtn');
+
+    async function loadRandomQuote () {
+      quoteText.textContent = 'Lade Zitat …';
+      quoteAuthor.textContent = '';
       try {
-        const res = await fetch(API_URL);
-        quotes = await res.json();
+        const res  = await fetch(API_URL);
+        if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+        const data = await res.json();
+        const { zitat, autor } = Array.isArray(data) ? data[0] : data;
+
+        quoteText.textContent   = `“${zitat}”`;
+        quoteAuthor.textContent = autor ? `— ${autor}` : '';
       } catch (err) {
-        console.error(err);
-        quotes = [];
+        console.error('Fetch error:', err);
+        quoteText.textContent = 'Fehler beim Laden des Zitats.';
       }
     }
 
-    function showRandomQuote() {
-      if (quotes.length === 0) {
-        document.getElementById('quoteText').textContent = 'Keine Zitate gefunden.';
-        document.getElementById('quoteAuthor').textContent = '';
-        return;
-      }
-      const { zitat, autor } = quotes[Math.floor(Math.random() * quotes.length)];
-      document.getElementById('quoteText').textContent = `“${zitat}”`;
-      document.getElementById('quoteAuthor').textContent = `— ${autor}`;
-    }
+    loadBtn.addEventListener('click', loadRandomQuote);
 
-    document.getElementById('newQuoteBtn').addEventListener('click', showRandomQuote);
-
-    // Initial load
-    (async () => {
-      await fetchQuotes();
-      showRandomQuote();
-    })();
+    // Initial call
+    loadRandomQuote();
   </script>
 </body>
 </html>
