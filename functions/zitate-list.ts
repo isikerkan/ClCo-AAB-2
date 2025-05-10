@@ -9,8 +9,8 @@ export const handler: Handler = async () => {
     const rows = await sql`
       SELECT id, zitat, autor
       FROM   zitate
-      ORDER BY id DESC
-      LIMIT  50
+      ORDER BY random()
+      LIMIT  1
     `;
     return {
       statusCode: 200,
@@ -21,4 +21,5 @@ export const handler: Handler = async () => {
     console.error(err);
     return { statusCode: 500, body: 'DB-Error' };
   }
+
 };
