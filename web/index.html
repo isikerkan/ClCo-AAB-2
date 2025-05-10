@@ -41,7 +41,13 @@
         const res  = await fetch(API_URL);
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
         const data = await res.json();
-        const { zitat, autor } = Array.isArray(data) ? data[0] : data;
+
+        // Wähle zufälliges Element, falls ein Array kommt
+        const quote = Array.isArray(data)
+          ? data[Math.floor(Math.random() * data.length)]
+          : data;
+
+        const { zitat, autor } = quote;
 
         quoteText.textContent   = `“${zitat}”`;
         quoteAuthor.textContent = autor ? `— ${autor}` : '';
